@@ -1,4 +1,4 @@
-uswg-deployment-scripts
+uWSGI-Deploy
 =======================
 
 Sample deployment config for uwsgi, installing a hello world application (using puppet)

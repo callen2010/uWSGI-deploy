@@ -37,7 +37,7 @@ class base::service {
 } 
 
 #### UWSGI ####
-class uwsgi { include realtyteller::install, realtyteller::conf }
+class uwsgi { include uwsgi::install, uwsgi::conf }
 
 class uwsgi::install { 
 }

@@ -13,7 +13,7 @@ class epel::repo {
 
 class base::install {
   Package { require => Class ["epel::repo"], }
-  $packagelist = ["sysstat","sendmail","vim-enhanced","git","mlocate","telnet","man","gcc","make","mysql","iftop","python","python-devel"] 
+  $packagelist = ["sysstat","sendmail","vim-enhanced","git","mlocate","telnet","man","gcc","make","mysql","iftop","python","python-devel","python-pip"] 
   package { $packagelist: ensure => installed, }
   exec { 'timezone set': command => 'ln -sf /usr/share/zoneinfo/EST /etc/localtime', onlyif => 'date | grep EST; [ $? -eq 1 ]', }
   exec { 'hostname change': command => 'echo `cat /etc/hostname`-`date +%D-%T` > /etc/hostname; echo \'127.0.0.1 localhost localhost.localdomain\' `cat /etc/hostname` > /etc/hosts; hostname `cat /etc/hostname`;', require => Exec['timezone set'], onlyif => 'grep "-" /etc/hosts; [ $? -eq 1 ]',}  
@@ -39,10 +39,32 @@ class base::service {
 class uwsgi { include uwsgi::install, uwsgi::conf }
 
 class uwsgi::install { 
+  Exec { require => Class ["base::install"], } 
+  exec { 'install uwsgi': command => 'pip install uwsgi', onlyif => 'pip list | grep uwsgi; [ $? -eq 1 ]', }
 }
 
 class uwsgi::conf {
+  File { require => Class ["base::install"], owner => "root", group => "root", mode => 644, ensure => file, }
+  file { "/etc/uwsgi": ensure => 'directory', }
+  file { "/etc/uwsgi/sample-config.ini": mode    => 600, source => 'puppet:///modules/uwsgi/sample-config.ini', require => File['/etc/uwsgi/'], }
 }
+
+#### APPLICATION ####
+class application { include application::install, application::start }
+
+class application::install { 
+  File { owner => "root", group => "root", mode => 644, ensure => file, }
+  file { "/var/www": ensure => 'directory', }
+  file { "/var/www/www.example.com": ensure => 'directory', require => File['/var/www/'], }
+  file { "/var/www/www.example.com/sample-application.py": mode    => 600, source => 'puppet:///modules/application/sample-application.py', require => File['/var/www/www.example.com'], }
+}
+
+class application::start {
+  Exec { require => Class ["application::install"], } 
+  exec { 'start uwsgi': command => 'nohup /usr/bin/uwsgi /etc/uwsgi/sample-config.ini &', }
+  #exec { 'start uwsgi': command => 'nohup /usr/bin/uwsgi /etc/uwsgi/sample-config.ini', onlyif => 'ps aux | grep sample-config.ini; [ $? -eq 1 ]', }
+}
+
 
 #### NGINX  ####
 class nginx { include nginx::install, nginx::conf, nginx::service }
@@ -70,3 +92,4 @@ class nginx::service {
 include base
 include nginx
 include uwsgi
+include application

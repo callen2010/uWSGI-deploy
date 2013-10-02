@@ -26,7 +26,6 @@ class base::conf {
   File { require => Class ["base::install"], owner => "root", group => "root", mode => 644, ensure => file, }
   file { "/root/.ssh": ensure => 'directory', }
   file { "/root/.ssh/id_rsa": mode    => 600, source => 'puppet:///modules/auth/id_rsa', require => File['/root/.ssh/'], }
-  file { "/root/.ssh/known_hosts": source => 'puppet:///modules/auth/known_hosts', require => File['/root/.ssh/'], }
 } 
 
 class base::service { 
@@ -55,7 +54,7 @@ class nginx::install {
 
 class nginx::conf {
   File { require => Class ["nginx::install"], owner => "nginx", group => "nginx", mode => 644, notify => Class ["nginx::service"], ensure => file, }
-  file { "/etc/nginx/conf/nginx.conf": replace => 'yes', source => 'puppet:///modules/nginx/nginx.conf', }
+  file { "/etc/nginx/nginx.conf": replace => 'yes', source => 'puppet:///modules/nginx/nginx.conf', }
   file { "/etc/nginx/sites-available": ensure => 'directory', require => Package['nginx'] }
   file { "/etc/nginx/sites-enabled": ensure => 'directory', require => Package['nginx'] }
   file { "/etc/nginx/sites-available/www.example.com": source => 'puppet:///modules/nginx/www.example.com', require => File['/etc/nginx/sites-available'], }

@@ -18,5 +18,5 @@ cd puppet-*
 ruby install.rb
 rm -rf puppet-*
 
-cd ~/uswg-deployment-scripts
+cd ~/uWSGI-deploy
 puppet apply --modulepath modules manifests/sample-mainfest.pp

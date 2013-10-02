@@ -1,14 +1,5 @@
 #!/bin/sh
-echo -e "===== uswg deployment script version 0.1 =====\n"
-echo -e "What is the name of the application you are deploying?"
-read application_name
-read -p "Deploy $application_name now?" -n 1
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-  echo -e "\nDeploying $application_name out\n"
-else
-  echo -e "\nDeclined"
-fi
+echo -e "===== uwsgi deployment script version 0.1 =====\n"
 
 # RDEVEL, IRB, RDOC, RUBYGEMS
 /usr/bin/yum -y install ruby-devel ruby-irb ruby-rdoc rubygems

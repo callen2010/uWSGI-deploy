@@ -9,6 +9,7 @@ echo -e "===== uwsgi deployment script version 0.1 =====\n"
 /bin/tar -xf facter-latest.tgz
 cd facter-*
 ruby install.rb
+cd ..
 rm -rf facter-*
 
 # PUPPET
@@ -16,6 +17,7 @@ rm -rf facter-*
 /bin/tar -xf puppet-latest.tgz
 cd puppet-*
 ruby install.rb
+cd ..
 rm -rf puppet-*
 
 cd ~/uWSGI-deploy

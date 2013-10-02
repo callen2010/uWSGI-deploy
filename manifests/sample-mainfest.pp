@@ -44,7 +44,7 @@ class uwsgi::install {
 }
 
 class uwsgi::conf {
-  File { require => Class ["base::install"], owner => "root", group => "root", mode => 644, ensure => file, }
+  File { require => Class ["uwsgi::install"], owner => "root", group => "root", mode => 644, ensure => file, }
   file { "/etc/uwsgi": ensure => 'directory', }
   file { "/etc/uwsgi/sample-config.ini": mode    => 600, source => 'puppet:///modules/uwsgi/sample-config.ini', require => File['/etc/uwsgi/'], }
 }
@@ -60,7 +60,7 @@ class application::install {
 }
 
 class application::start {
-  Exec { require => Class ["application::install"], } 
+  Exec { require => Class ["application::install"], Class["uswgi::conf"], } 
   exec { 'start uwsgi': command => 'nohup /usr/bin/uwsgi /etc/uwsgi/sample-config.ini &', }
   #exec { 'start uwsgi': command => 'nohup /usr/bin/uwsgi /etc/uwsgi/sample-config.ini', onlyif => 'ps aux | grep sample-config.ini; [ $? -eq 1 ]', }
 }

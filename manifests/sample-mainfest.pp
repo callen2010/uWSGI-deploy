@@ -60,7 +60,7 @@ class application::install {
 }
 
 class application::start {
-  Exec { require => Class ["application::install"], Class["uswgi::conf"], } 
+  Exec { require => [ Class ["application::install"], Class ["uwsgi::conf"] ] } 
   exec { 'start uwsgi': command => 'nohup /usr/bin/uwsgi /etc/uwsgi/sample-config.ini &', }
   #exec { 'start uwsgi': command => 'nohup /usr/bin/uwsgi /etc/uwsgi/sample-config.ini', onlyif => 'ps aux | grep sample-config.ini; [ $? -eq 1 ]', }
 }

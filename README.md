@@ -1,9 +1,9 @@
 uWSGI-Deploy
 =======================
 
-Sample deployment config for uwsgi, installing a hello world application (using puppet)
+Sample deployment config for uwsgi, installing a hello world application, with nginx as a front end (using puppet)
 
-INSTRUCTIONS:
+INSTRUCTIONS: This has been tested on Amazon Linux AMI 2013.09
 
 
    * Install Git

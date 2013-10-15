@@ -21,4 +21,4 @@ cd ..
 rm -rf puppet-*
 
 cd ~/uWSGI-deploy
-puppet apply --modulepath modules manifests/sample-mainfest.pp
+puppet apply --modulepath modules manifests/uwsgi-mainfest.pp
